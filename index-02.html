@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>堆栈和队列</title>
+</head>
+<body>
+    
+
+
+
+
+
+<script>
+/**
+ * Stack(堆栈)
+ * 先入后出(First in Last out)
+ * 
+ * 
+ * Queue(队列)
+ * 先进先出(First in First out)
+ * 
+ * 
+ * 
+ * */    
+
+{
+    /**
+     * 面试题
+     * 判断括号字符串是否合法，字符串只能包含大中小括号
+     * 
+     * 例如
+     * "([])"  -> 合法
+     * "][()"  -> 不合法
+     * "{()}"  -> 合法
+     * 
+    */
+
+    function isValid(str) {
+        const stack = [];
+        const bracketsMap = {
+            ")": "(",
+            "]": "[",
+            "}": "{"
+        };
+        for(let i=0,l=str.length;i<l;i++) {
+            let s = str[i];
+            if(!(s in bracketsMap)) {   // 如果是左括号，则压入栈
+                stack.push(s);
+            } else if(!stack.length || bracketsMap[s] !== stack.pop()) {
+                return false;
+            }
+        }
+        return !stack.length;
+    }
+
+    console.log( isValid('{()}') );
+    console.log( isValid('{([])}') );
+    console.log( isValid('((([]))') );
+}
+
+
+
+{
+    /**
+     * 1.用队列实现栈
+     * 2.用栈实现队列
+     * 
+     * 
+    */
+}
+
+
+
+
+
+
+
+
+    
+    
+</script>
+</body>
+</html>
