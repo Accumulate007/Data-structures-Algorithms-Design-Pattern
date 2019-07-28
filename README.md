@@ -13,13 +13,13 @@ start at 2019-07-25
 3.Feedback  反馈
 
 #### 时间复杂度和空间复杂度
-O(1)
-O(log n)
-O(n)
-O(n^2)
-O(n^3)
-O(2^n)
-O(n!)
+O(1)</br>
+O(log n)</br>
+O(n)</br>
+O(n^2)</br>
+O(n^3)</br>
+O(2^n)</br>
+O(n!)</br>
 
 ```
 // O(1)
@@ -42,10 +42,10 @@ for(let i=1;i<n;i++) {
 ```
 
 四种算法的时间复杂度：
-1.二分查找：O(logn)
-2.二叉树遍历：O(n)
-3.二维矩阵排序：O(n)
-4.常见排序(快排等)：O(nlogn)
+1.二分查找：O(logn)</br>
+2.二叉树遍历：O(n)</br>
+3.二维矩阵排序：O(n)</br>
+4.常见排序(快排等)：O(nlogn)</br>
 
 #### 如何通过LeetCode进行算法题目练习
 网址：https://leetcode.com/problemset/all
