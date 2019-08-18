@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>回溯算法</title>
+</head>
+<body>
+
+
+
+
+<script>
+/**
+ *回溯算法：从一个可能的动作开始并试着用这个动作解决问题，如果不能解决问题，就回溯并选择另一个动作直到将问题解决。
+ *根据这种行为，回溯算法会尝试所有可能的动作来解决问题。
+ *
+ *可用回溯解决的著名问题：
+ *骑士巡逻问题
+ *N皇后问题
+ *迷宫老鼠问题
+ *数独解题器
+ * 
+ *
+*/
+
+// 迷宫老鼠问题：有一个N*N的矩阵，矩阵的每个位置是一个方块，每个位置可以是空闲(1)或者被阻挡(0)的，老鼠的目标是从位置[0][0]
+// 开始并移动到[n-1][n-1]
+function ratInAMaze(maze) {
+    const solution = [];
+    for(let i=0; i < maze.length; i++) {
+        solution[i] = [];
+        for(let j=0; j < maze[i].length; j++) {
+            solution[i][j] = 0;
+        }
+    }
+    if(findPath(maze, 0, 0, solution) === true) {
+        return solution;
+    }
+    return 'NO PATH FOUND'
+}
+
+function findPath(maze, x, y, solution) {
+    const n = maze.length;
+    if(x === n-1 && y === n-1) {
+        solution[x][y] = 1;
+        return true;
+    }
+
+    if(isSafe(maze, x, y) === true) {
+        solution[x][y] = 1;
+        if(findPath(maze, x+1, y, solution)) {
+            return true;
+        }
+        if(findPath(maze, x, y+1, solution)) {
+            return true;
+        }
+
+        solution[x][y] = 0;
+        return false;
+    }
+    return false;
+}
+
+function isSafe(maze, x, y) {
+    const n = maze.length;
+    if(x>=0 && y>=0 && x<n && y<n && maze[x][y]) {
+        return true;
+    }
+    return false;
+}
+
+
+// 数独解题器
+// 用数字1-9填满一个9X9的矩阵，要求每行和每列都由这九个数字构成，而且矩阵中3x3的小方块，同样需要分别用这九个数字填满。
+function sudokuSolver(matrix) {
+    if(solveSudoku(matrix) === true) {
+        return matrix;
+    }
+    return 'This question has no answer';
+}
+
+const UNASSIGNED = 0;
+
+function solveSudoku(matrix) {
+    let row = 0;
+    let col = 0;
+    let checkBlankSpaces = false;
+    for(row = 0; row < matrix.length; row++) {
+        for(col = 0; col < matrix[row].length; col++) {
+            if(matrix[row][col] === UNASSIGNED) {
+                checkBlankSpaces = true;
+                break;
+            }
+        }
+        if(checkBlankSpaces === true) {
+            break;
+        }
+    }
+
+    if(checkBlankSpaces === false) {
+        return true;
+    }
+
+    for(let num=1; num <=9; num++) {
+        if(isSafe2(matrix, row, col, num)) {
+            matrix[row][col] = num;
+            if(solveSudoku(matirx)) {
+                return true;
+            }
+            matrix[row][col] = UNASSIGNED;
+        }
+    }
+    return false;
+}
+
+function isSafe2(matirx, row, col, num) {
+    return (
+        !usedInRow(matrix, row, num) && 
+        !usedInCol(matrix, col, num) &&
+        !usedInBox(matirx, row - (row % 3), col - (col % 3), num)
+    );
+}
+
+function usedInBox(matirx, row, num) {
+    for(let col=0; col < matirx.length; col++) {
+        if(matirx[row][col] === num) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function usedInCol(matirx, col, num) {
+    for(let row=0; row < matirx.length; row++) {
+        if(matirx[row][col] === num) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function usedInBox(matrix, boxStartRow, boxStartCol, num) {
+    for(let row=0; row < 3; row++) {
+        for(let col=0; col<3; col++) {
+            if(matrix[row+boxStartRow][col+boxStartCol] === num) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+
+
+</script>
+</body>
+</html>

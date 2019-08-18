@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>集合</title>
+</head>
+<body>
+
+
+
+
+<script>
+/**
+ * 集合是一种不允许值重复的顺序数据结构
+ * 
+ *
+*/
+
+// 实现集合
+class MySet {
+    constructor() {
+        this.items = {};
+    }
+
+    // 集合是否含有某个元素
+    has(element) {
+        return Object.prototype.hasOwnProperty.call(this.items, element);
+    }
+
+    add(element) {
+        if(!this.has(element)) {
+            this.items[element] = element;
+            return true;
+        }
+        return false;
+    }
+
+    delete(element) {
+        if(this.has(element)) {
+            delete this.items[element];
+            return true;
+        }
+        return false;
+    }
+
+    size() {
+        return Object.keys(this.items).length;
+    }
+
+    values() {
+        if(Object.values) {
+            return Object.values(this.items);
+        } else {
+            let values = [];
+            for(var key in this.items) {
+                if(this.items.hasOwnProperty(key)) {
+                    values.push(key);
+                }
+            }
+            return values;
+        }
+    }
+}
+
+
+
+
+
+</script>
+</body>
+</html>

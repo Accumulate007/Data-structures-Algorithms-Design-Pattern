@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>字典和散列表</title>
+</head>
+<body>
+
+
+
+
+<script>
+/**
+ * 字典和散列表：都是使用[键，值]对的形式来存储数据，但是字典中的每个键只能有一个值
+ * 
+ *散列算法的作用是尽可能快地在数据结构中找到一个值。
+ *散列函数的作用是给定一个键值，然后返回值在表中的地址。
+ *
+ *
+*/
+
+
+function defaultToString(item) {
+    if(item === null) {
+        return 'NULL';
+    } else if(item === undefined) {
+        return 'UNDEFINED';
+    } else if(typeof item === 'string' || item instanceof String) {
+        return `${item}`;
+    }
+
+    return item.toString();
+}
+
+class ValuePair {
+    constructor(key, value) {
+        this.value = value;
+        this.key = key;
+    }
+
+    toString() {
+        return `[#${this.key}: ${this.value}]`;
+    }
+}
+
+
+
+// 实现字典
+
+class Dictoinary {
+    constructor(toStrFn = defaultToString) {
+        this.toStrFn = toStrFn;
+        this.table = {};
+    }
+
+    // 检测某个键是否存在于字典中
+    has(key) {
+        return this.table[this.toStrFn(key)] != null;
+    }
+
+    set(key, value) {
+        if(key != null && value != null) {
+            const tableKey = this.toStrFn(key);
+            this.table[tableKey] = new ValuePair(key, value);
+            return true;
+        }
+        return false;
+    }
+
+    remove(key) {
+        if(this.has(key)) {
+            delete this.table[this.toStrFn(key)];
+            return true;
+        }
+        return false;
+    }
+
+    get(key) {
+        const valuePair = this.table[this.toStrFn(key)];
+        return valuePair == null ? undefined : valuePair.value;
+    }
+
+    keyValues() {
+        if(Object.values) {
+            return Object.values(this.table);
+        } else {
+            const valuesPairs = [];
+            for(const k in this.table) {
+                if(this.hasKey(k)) {
+                    valuesPairs.push(this.table(k));
+                }
+            }
+            return valuesPairs;
+        }
+    }
+
+    // 返回字典中用于识别值的所有原始键名
+    keys() {
+        return this.keyValues().map(valuePair => valuePair.key);
+    }
+
+    values() {
+        return this.keyValues().map(valuePair => valuePair.value);
+    }
+
+    forEach(callbackFn) {
+        const valuePairs = this.keyValues();
+        for(let i=0; i<valuePairs.length; i++) {
+            const result = callbackFn(valuePairs[i].key, valuePairs[i].value);
+            if(result === false) {
+                break;
+            }
+        }
+    }
+
+    size() {
+        return Object.keys(this.table).length;
+    }
+
+    isEmpty() {
+        return this.size() === 0;
+    }
+
+    clear() {
+        this.table = {};
+    }
+}
+
+
+// 创建散列表
+
+class HashTable {
+    constructor(toStrFn = defaultToString) {
+        this.toStrFn = toStrFn;
+        this.table = {};
+    }
+
+    loseloseHashCode(key) {
+        if(typeof key === 'number') {
+            return key;
+        }
+        const tableKy = this.toStrFn(key);
+        let hash = 0;
+        for(let i=0;i<tableKey.length;i++) {
+            hash += tableKey.charCodeAt(i);
+        }
+        return hash % 37;
+    }
+
+    hashCode(key) {
+        return this.loseloseHashCode(key);
+    }
+
+    put(key, value) {
+        if(key != null && value != null) {
+            const position = this.hashCode(key);
+            this.table[position] = new ValuePair(key, value);
+            return true;
+        }
+        return false;
+    }
+
+    get(key) {
+        const valuePair = this.table[this.hashCode(key)];
+        return valuePair == null ? undefined : valuePair.value;
+    }
+
+    remove(key) {
+        const hash = this.hashCode(key);
+        const valuePair = this.table[hash];
+        if(valuePair != null) {
+            delete this.table[hash];
+            return true;
+        }
+        return false;
+    }
+}
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>栈</title>
+</head>
+<body>
+
+
+
+
+<script>
+/**
+ *栈：是一种遵循后进先出(LIFO)原则的有序集合
+ *新添加或待删除的元素都保存在栈的同一端，叫做栈顶；另一端叫栈底。
+ * 
+ *
+*/
+
+{
+    class Stack{
+        constructor() {
+            this.items = [];
+        }
+
+        // 往栈顶添加元素
+        push(element) {
+            this.items.push(element);
+        }
+
+        // 移除栈顶的元素
+        pop() {
+            this.items.pop();
+        }
+
+        // 该方法返回栈顶的元素
+        peek() {
+            return this.items[this.items.length - 1];
+        }
+
+        // 返回栈元素个数，栈的长度
+        size() {
+            return this.items.length;
+        }
+
+        // 检查栈是否为空
+        isEmpty() {
+            return this.items.length === 0;
+        }
+
+        // 清空栈内元素
+        clear() {
+            this.items = [];
+        }
+
+    }
+
+    const stack = new Stack();
+
+    stack.push(5);
+    stack.push(8);
+    
+}
+
+
+{
+    class Stack{
+        constructor() {
+            this.count = 0;     // 记录栈的大小
+            this.items = {};
+        }
+
+        push(item) {
+            this.items[this.count] = item;
+            this.count++;
+        }
+
+        size() {
+            return this.count;
+        }
+
+        isEmpty(){
+            return this.count === 0;
+        }
+
+        pop() {
+            if(this.isEmpty()) return undefined;
+            this.count--;
+            const result = this.items[this.count];
+            delete this.items[this.count];
+            return result;
+        }
+
+        peek() {
+            if(this.isEmpty()) return undefined;
+            return this.items[this.count -1];
+        }
+
+        clear() {
+            this.items = {};
+            this.count = 0;
+        }
+    }
+
+    // 利用栈结构，把十进制转换成基数为2~36的任意进制
+    // decNumber: 需要转换的十进制数据
+    // base：从十进制转换到 base 进制, 2 <= base <= 36 
+    function baseConverter(decNumber, base) {
+        const remStack = new Stack();
+        const digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let number = decNumber;
+        let rem;
+        let baseString = '';
+
+        if(!(base >=2 && base <= 36)) {
+            return '';
+        }
+
+        while(number > 0) {
+            rem = Math.floor(number % base);
+            remStack.push(rem);
+            number = Math.floor(number / base);
+        }
+
+        while(!remStack.isEmpty()) {
+            baseString += digits[remStack.pop()];
+        }
+
+        return baseString;
+    }
+}
+
+
+
+</script>
+</body>
+</html>
