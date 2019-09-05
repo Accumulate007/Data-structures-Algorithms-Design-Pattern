@@ -4,151 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>树</title>
+    <title>适配器模式</title>
 </head>
 <body>
 
 
 
-
 <script>
 /**
- * 树：一个树结构包含一系列存在父子关系的节点，每个节点都有一个父节点以及零个或多个字节点。
- * 
- *树中的节点分为内部节点和外部节点。至少有一个字节点称为内部节点，没有子元素的节点称为外部节点或叶节点。
+ *适配器模式(Flyweight Pattern)
+ *又称包装器模式，将一个类的接口(方法、属性)转化成用户需要的另一个接口，解决类之间接口不兼容的问题。主要功能是进行转换匹配，
+ *目的是复用已有的功能。
  *
- *节点的一个属性是深度，节点的深度取决于它的祖先节点的数量。
- *
- *二叉树：二叉树的节点最多只能有两个子节点，一个是左侧子节点，一个是右侧子节点。
- *
- *二叉搜索树(BST)：是二叉树的一种，但是只允许你在左侧节点存储比父节点小的值，在右侧节点存储比父节点大的值。
- *
- *自平衡树(AVL)：任何一个节点左右两侧子树的高度之差最多为1
- *
- *红黑树
  *
 */
 
-// 创建二叉树
+// 适配器模式应用：使用 Axios 替代 jQuery的 $.ajax()
 
-class Node {
-    constructor(key) {
-        this.key = key;
-        this.left = null;
-        this.right = null;
-    }
+function ajaxToAxios(ajaxOptions) {
+    return axios({
+        url: ajaxOptions.url,
+        method: ajaxOptions.method,
+        responseType: ajaxOptions.dataType,
+        data: ajaxOptions.data
+    });
 }
 
-
-class BinarySearchTree {
-    constructor(compareFn = defaultCompare) {
-        this.compareFn = compareFn;
-        this.root = null;
-    }
-
-    inertNode(node, key) {
-        if(this.compareFn(key, node.key) === Compare.LESS_THAN) {
-            if(node.left == null) {
-                node.left = new Node(key);
-            } else {
-                this.insertNode(node.left, key);
-            }
-        } else {
-            if(node.right == null) {
-                node.right = new Node(key);
-            } else {
-                this.inertNode(node.right, key);
-            }
-        }
-    }
-
-    // 向树中插入一个键(节点)
-    insert(key) {
-        if(this.root == null) {
-            this.root = new Node(key);
-        } else {
-            this.insertNode(this.root, key);
-        }
-    }
-
-    /**中序遍历*/
-    inOrderTraverse(callback) {
-        this.inOrderTraverseNode(this.root, callback);
-    }
-
-    inOrderTraverseNode(node, callback) {
-        if(node != null) {
-            this.inOrderTraverseNode(node.left, callback);
-            callback(node.key);
-            this.inOrderTraverseNode(node.right, callback);
-        }
-    }
-
-    /**先序遍历**/
-    preOrderTraverse(callback) {
-        this.preOrderTraverseNode(this.root, callback);
-    }
-
-    preOrderTraverseNode(node, callback) {
-        if(node != null) {
-            callback(node.key);
-            this.preOrderTraverseNode(node.left, callback);
-            this.preOrderTraverseNode(node.right, callback);
-        }
-    }
-
-    /**后序遍历**/
-    postOrderTraverse(callback) {
-        this.postOrderTraverseNode(this.root, callback);
-    }
-
-    postOrderTraverseNode(node, callback) {
-        if(node != null) {
-            this.preOrderTraverseNode(node.left, callback);
-            this.preOrderTraverseNode(node.right, callback);
-            callback(node.key);
-        }
-    }
-
-    // 搜索最小值
-    min() {
-        return this.minNode(this.root);
-    }
-
-    minNode(node) {
-        let current = node;
-        while(current != null && current.left != null) {
-            current = current.left;
-        }
-        return current;
-    }
-
-    // 搜索最大值
-    max() {
-        return this.maxNode(this.root);
-    }
-
-    maxNode(node) {
-        let current = node;
-        while(current != null && current.right != null) {
-            current = current.right;
-        }
-        return current;
-    }
+/***经过适配器包装***/
+$.ajax = function(options) {
+    return ajaxToAxios(options);
 }
-
-
-// 访问树的节点有三种方式：中序、先序、后序
-
-
-// 中序遍历是一种以上行顺序访问BST所有节点的遍历方式，也就是从最小到最大的顺序访问所有节点。先访问左侧子节点，然后是根节点，
-// 最后是右侧子节点。
-
-// 先序遍历是以优先后代节点的顺序访问每个节点的。先序遍历会先访问节点本身，然后访问它的左侧子节点，最后是右侧子节点。
-
-// 后序遍历是先访问节点的后代节点，再访问节点本身。后续遍历先访问左侧子节点，再访问右侧子节点，最后是父节点本身。
-
-
 
 
 

@@ -4,67 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>集合</title>
+    <title>建造者模式</title>
 </head>
 <body>
 
 
 
-
 <script>
 /**
- * 集合是一种不允许值重复的顺序数据结构
- * 
+ *建造者模式(Builder Pattern)
+ *又称生成器模式，分布构建一个复杂对象，并允许按步骤构造。
+ *
  *
 */
 
-// 实现集合
-class MySet {
-    constructor() {
-        this.items = {};
+// 通用实现
+class ProductBuilder {
+    constructor(param) {
+        this.param = param;
     }
 
-    // 集合是否含有某个元素
-    has(element) {
-        return Object.prototype.hasOwnProperty.call(this.items, element);
+    buildPart1() {
+        this.part1 = 'part1111';
     }
 
-    add(element) {
-        if(!this.has(element)) {
-            this.items[element] = element;
-            return true;
-        }
-        return false;
-    }
-
-    delete(element) {
-        if(this.has(element)) {
-            delete this.items[element];
-            return true;
-        }
-        return false;
-    }
-
-    size() {
-        return Object.keys(this.items).length;
-    }
-
-    values() {
-        if(Object.values) {
-            return Object.values(this.items);
-        } else {
-            let values = [];
-            for(var key in this.items) {
-                if(this.items.hasOwnProperty(key)) {
-                    values.push(key);
-                }
-            }
-            return values;
-        }
+    buildPart2() {
+        this.part1 = 'part222';
     }
 }
 
+// 指挥者，负责最终的组装搭建
+class Director {
+    constructor(param) {
+        const _product = new ProductBuilder(param);
+        _product.buildPart1();
+        _product.buildPart2();
+        return _product;
+    }
+}
 
+// 获得实例
+const product = new Director('china');
+
+/**
+建造者模式的优点
+1.使产品的构建流程和产品的表现分离
+2.扩展方便
+3.更好的复用性
+
+如果产品之间差异很大，复用性不高，那么不要使用建造者模式
+实例的创建增加了许多额外的结构，增加了复杂度
+
+*/
 
 
 

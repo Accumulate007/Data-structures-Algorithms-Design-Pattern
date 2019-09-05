@@ -4,80 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>数组</title>
+    <title>设计原则</title>
 </head>
 <body>
 
 
 
-
 <script>
 /**
- * 数组
- *在数组中存放同一数据类型的值，这是最佳实践。
- * 
+ *面向对象三大特性：
+ *继承、封装、多态
+ *
+ *面向对象六大原则：
+ *单一职责原则(SRP)
+ *开放封闭原则(OCP)
+ *最少知识原则(LKP)
+ *
+ *
  *
 */
 
-{
-    // 求斐波那契数列前20个数的和
-    const fibonacct = [];
-    fibonacct[1] = 1;
-    fibonacct[2] = 1;
-    const fibonacctLen = 20;
-    for(let i=3;i<fibonacctLen; i++) {
-        fibonacct[i] = fibonacct[i-1] + fibonacct[i-2];
-    }
-}
+
+/**
+单一职责原则
+是指对一个类来说，应该仅有一个引起它变化的原因，也就是说一个类只做一件事情。
+
+优点
+降低单个类的复杂度，提高可读性和可维护性，功能之间的界限更清晰
+类之间根据功能被分为更小的粒度，有助于代码的复用
+
+*/
 
 
-{
-    // 往数组头部插入一个新元素(实现数组的unshift方法)
-    Array.prototype.myUnshift = function(value) {
-        // 数组中的每个元素都往右移动一个位置
-        for(let i=this.length;i>=0;i--) {
-            this[i] = this[i-1];
-        }
-        this[0] = value;
-    }
-}
+/**
+开放封闭原则
+指一个模块在扩展性方面应该是开放的，而在更改性方面应该是封闭的。对扩展开放，对修改封闭。
+当需要增加需求的时候，尽量通过扩展新代码的方式，而不是修改已有的代码。
 
-{
-    // 迭代JavaScript中的二维数组的元素
-    let arr = [[1,2,3], ['a', 'b', 'c']];
-    for(let i=0;i<arr.lengt;i++) {
-        for(let j=0;j<arr[i].length;j++) {
-            console.log(arr[i][j]);
-        }
-    }
-}
+优点
+增加可维护性，避免因为修改给系统带来的不稳定性。
+
+*/
 
 
-{
-    // 使用数组的sort方法实现自定义排序
-    const friends = [
-        {name: 'a', age: 15},
-        {name:'b', age: 40},
-        {name: 'c', age: 36}
-    ];
-    function compareAge(a, b) {
-        if(a.age < b.age) {
-            return -1;
-        } else if(a.age > b.age) {
-            return 1;
-        }
+/**
+最少知识原则
+一个对象应该对其它对象有最少的了解。
+通常为了减少对象之间的联系，是通过引入一个第三者来帮助进行通信，阻隔对象之间的直接通信，从而减少耦合。
 
-        return 0;
-    }
+优点
+降低对象之间不必要的依赖，减少耦合度
 
-    console.log( friends.sort(compareAge) );
-}
+*/
 
-
-{
-    // JavaScript在对字符串进行排序的时候，是根据字符对应的ASCII值来进行比较的
-    // 'A' < 'a'  相当于 65 < 97
-}
 
 
 

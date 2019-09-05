@@ -4,106 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>二叉堆和堆排序</title>
+    <title>装饰者模式</title>
 </head>
 <body>
 
 
 
-
 <script>
 /**
- * 二叉堆是一种特殊的二叉树，有两个特性：
- *1.它是一棵完全二叉树，树的每一层都有左侧和右侧子节点(除了最后一层的叶子节点)，而且最后层的叶子节点尽可能都是左侧子节点。
- *2.二叉堆不是最小堆就是最大堆。最小堆：每个子节点都大于等于父节点；最大堆：每个子节点都小于等于父节点。
- * 
+ *装饰者模式(Decorator Pattern)
+ *在不改变原对象的基础上，通过对其添加属性和方法来进行包装扩展，使得原有对象可以动态具有更多功能，即动态地给一个对象添加
+ *额外的职责。
+ *在装饰器模式中，一个对象被另外一个对象包装起来，形成一条包装链，并增加了原先对象的功能。
+ *
+ *
  *
 */
 
-function swap(array, a, b) {
-    const temp = array[a];
-    array[a] = array[b];
-    array[b] = temp;
+
+function fn() {
+    console.log('this is fn...');
 }
 
 
-// 创建最小堆类
-
-class MinHeap {
-    constructor(compareFn = defaultCompare) {
-        this.compareFn = compareFn;
-        this.heap = [];
-    }
-
-    getLeftIndex(index) {
-        return 2*index + 1;
-    }
-
-    getRightIndex(index) {
-        return 2*index + 2;
-    }
-
-    getParentIndex(index) {
-        if(index === 0) {
-            return undefined;
-        }
-        return Math.floor((index - 1) / 2);
-    }
-
-    insert(value) {
-        if(value != null) {
-            this.heap.push(value);
-            this.shiftUp(this.length - 1);
-            return true;
-        }
-        return false;
-    }
-
-    shiftUp(index) {
-        let parent = this.getParentIndex(index);
-        while(
-            index > 0 &&
-            this.compareFn(this.heap[parent], this.heap(index))
-        ) {
-            swap(this.heap, parent, index);
-            index = parent;
-            parent = this.getParentIndex(index);
-        }
-    }
-
-    size() {
-        return this.heap.length;
-    }
-
-    isEmpty() {
-        return this.size() === 0;
-    }
-
-    findMinmum() {
-        return this.isEmpty() ? undefined : this.heap[0];
-    }
-
-    // 导出堆中的最大最小值
-    extract() {
-        if(this.isEmpty()) {
-            return undefined;
-        }
-        if(this.size() === 1) {
-            return this.heap.shift();
-        }
-        const removedValue = this.heap.shift();
-        this.shiftDown(0);
-        return removedValue;
-    }
+const fn = function() {
+    const f = fn;
+    console.log('add some function...');
+    f();
 }
-
-
-
-
-
-
-
-
 
 
 

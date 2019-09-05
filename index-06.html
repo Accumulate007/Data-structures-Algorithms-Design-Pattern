@@ -4,179 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>字典和散列表</title>
+    <title>代理模式</title>
 </head>
 <body>
 
 
 
-
 <script>
 /**
- * 字典和散列表：都是使用[键，值]对的形式来存储数据，但是字典中的每个键只能有一个值
- * 
- *散列算法的作用是尽可能快地在数据结构中找到一个值。
- *散列函数的作用是给定一个键值，然后返回值在表中的地址。
+ *代理模式(Proxy Pattern)
+ *又称委托模式，它为目标对象创造了一个代理对象，以控制对目标对象的访问。
  *
  *
 */
 
+/**
+正向代理和反向代理
 
-function defaultToString(item) {
-    if(item === null) {
-        return 'NULL';
-    } else if(item === undefined) {
-        return 'UNDEFINED';
-    } else if(typeof item === 'string' || item instanceof String) {
-        return `${item}`;
-    }
+正向代理：一般的访问流程是客户端直接向目标服务器发送请求获取内容，使用正向代理后，客户端改为向代理服务器发送请求，并指定目标
+服务器。然后由代理服务器和原始服务器进行通信，转交请求并获取内容，然后返回给客户端。正向代理隐藏了真实的客户端，为客户端收发
+请求。
 
-    return item.toString();
-}
+反向代理：使用反向代理后，直接受到请求的服务器是代理服务器，然后将请求转发给内部网络上真正进行处理的服务器，得到的结构返回给
+客户端。反向代理隐藏了真实的服务器，为服务器收发请求。
 
-class ValuePair {
-    constructor(key, value) {
-        this.value = value;
-        this.key = key;
-    }
+*/
 
-    toString() {
-        return `[#${this.key}: ${this.value}]`;
+let superStar = {
+    name: 'messi',
+    playFootball: function(money) {
+        console.log(money);
     }
 }
 
-
-
-// 实现字典
-
-class Dictoinary {
-    constructor(toStrFn = defaultToString) {
-        this.toStrFn = toStrFn;
-        this.table = {};
-    }
-
-    // 检测某个键是否存在于字典中
-    has(key) {
-        return this.table[this.toStrFn(key)] != null;
-    }
-
-    set(key, value) {
-        if(key != null && value != null) {
-            const tableKey = this.toStrFn(key);
-            this.table[tableKey] = new ValuePair(key, value);
-            return true;
-        }
-        return false;
-    }
-
-    remove(key) {
-        if(this.has(key)) {
-            delete this.table[this.toStrFn(key)];
-            return true;
-        }
-        return false;
-    }
-
-    get(key) {
-        const valuePair = this.table[this.toStrFn(key)];
-        return valuePair == null ? undefined : valuePair.value;
-    }
-
-    keyValues() {
-        if(Object.values) {
-            return Object.values(this.table);
+let ProxyAssistant = {
+    name: '经纪人jack',
+    playFootball: function(money) {
+        if(money > 1000) {
+            console.log('yes, I will play for you!');
+            superStar.playFootball(money);
         } else {
-            const valuesPairs = [];
-            for(const k in this.table) {
-                if(this.hasKey(k)) {
-                    valuesPairs.push(this.table(k));
-                }
-            }
-            return valuesPairs;
+            throw new Error('money is not enough')
         }
-    }
-
-    // 返回字典中用于识别值的所有原始键名
-    keys() {
-        return this.keyValues().map(valuePair => valuePair.key);
-    }
-
-    values() {
-        return this.keyValues().map(valuePair => valuePair.value);
-    }
-
-    forEach(callbackFn) {
-        const valuePairs = this.keyValues();
-        for(let i=0; i<valuePairs.length; i++) {
-            const result = callbackFn(valuePairs[i].key, valuePairs[i].value);
-            if(result === false) {
-                break;
-            }
-        }
-    }
-
-    size() {
-        return Object.keys(this.table).length;
-    }
-
-    isEmpty() {
-        return this.size() === 0;
-    }
-
-    clear() {
-        this.table = {};
     }
 }
 
-
-// 创建散列表
-
-class HashTable {
-    constructor(toStrFn = defaultToString) {
-        this.toStrFn = toStrFn;
-        this.table = {};
-    }
-
-    loseloseHashCode(key) {
-        if(typeof key === 'number') {
-            return key;
-        }
-        const tableKy = this.toStrFn(key);
-        let hash = 0;
-        for(let i=0;i<tableKey.length;i++) {
-            hash += tableKey.charCodeAt(i);
-        }
-        return hash % 37;
-    }
-
-    hashCode(key) {
-        return this.loseloseHashCode(key);
-    }
-
-    put(key, value) {
-        if(key != null && value != null) {
-            const position = this.hashCode(key);
-            this.table[position] = new ValuePair(key, value);
-            return true;
-        }
-        return false;
-    }
-
-    get(key) {
-        const valuePair = this.table[this.hashCode(key)];
-        return valuePair == null ? undefined : valuePair.value;
-    }
-
-    remove(key) {
-        const hash = this.hashCode(key);
-        const valuePair = this.table[hash];
-        if(valuePair != null) {
-            delete this.table[hash];
-            return true;
-        }
-        return false;
-    }
-}
 
 
 

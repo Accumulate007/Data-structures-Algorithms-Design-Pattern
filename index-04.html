@@ -4,167 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>链表</title>
+    <title>抽象工厂模式</title>
 </head>
 <body>
 
 
 
-
 <script>
 /**
- * 链表：存储有序的元素集合，但不同于数组，链表中的元素在内存中是不连续的。每个元素由一个存储元素本身的节点和一个指向下一个
- *元素的引用组成。链表相对于数组的好处就是，删除或者添加元素的时候不需要移动其它元素。但是链表需要使用指针。
- *在数组中我们可以通过下标访问任何位置的元素，而想要访问链表中间的一个元素，则需要从七点(表头)开始迭代链表直到找到所需元素。
- * 
- *双向链表
- *链表中一个节点只有链向下一个节点的链接，而双向链表中，一个链向下一个元素，一个链向前一个元素。
+ *抽象工厂模式(Abstract Pattern)
+ *只要实现了抽象类的实例，都实现了抽象类定制的结构。
  *
- *循环链表
- *循环链表和链表之间唯一的区别就是循环链表的最后一个元素的指针不是指向undefined，而是指向第一个元素(head)
  *
- *有序链表
- *有序链表是指保持元素有序的链表结构。
 */
 
-const defaultEquals = function (a, b) {
-    return a === b;
-}
 
-class Node {
-    constructor(element) {
-        this.element = element;
-        this.next = undefined;
-    }
-}
-
-class DoublyNode extends Node {
-    constructor(element, next, prev) {
-        super(element, next);
-        this.prev = prev;
+class AbstractClass {
+    constructor() {
+        if(new.target === AbstractClass) {
+            throw new Error('抽象类不能直接实例化');
+        }
     }
 }
 
+// 通用抽象工厂模式实现
 
 
-// 实现链表
-class LinkedList {
-    constructor(equalsFn = defaultEquals) {
-        this.count = 0;
-        this.head = undefined;
-        this.equalsFn = dequalsFn;
-    }
-
-    // 向链表尾部添加新元素
-    push(element) {
-        const node = new Node(element);
-        let current;
-        if(this.head == undefined) {
-            this.head = node;
-        } else {
-            current = this.head;
-            while(current.next != null) {
-                current = current.next;
-            }
-            current.next = node;
+// 工厂抽象类
+class AbstractFactory {
+    constructor() {
+        if(new.target === AbstractFactory) {
+            throw new Error('抽象类不能直接实例化');
         }
-        this.count++;
     }
 
-    // 从链表移除元素
-    removeAt(index) {
-        if(index >= 0 && index < this.count) {
-            let current = this.head;
-            if(index === 0) {   // 移除第一项
-                this.head = current.next;
-            } else {
-                let previous;
-                for(let i=0;i<index;i++) {
-                    previous = current;
-                    current = current.next;
-                }
-                previous.next = current.next;
-            }
-            this.count--;
-            return current.element;
+    createProduct1() {
+        throw new Error('抽象方法无法调用');
+    }
+}
+
+// 具体类
+class Factory extends AbstractFactory {
+    constructor() {
+        super();
+    }
+
+    createProduct1(type) {
+        switch(type) {
+            case 'Product1': 
+                return new Product1();
+            case 'Product2': 
+                return new Product2();
+            default: 
+                throw new Error('there is no such thing...');
         }
-        return undefined;
-    }
-
-    // 获取链表中的元素
-    getElementAt(index) {
-        if(indxe >=0 && index <= this.count) {
-            let node = this.head;
-            for(let i=0; i< index && node != null; i++) {
-                node = node.next;
-            }
-            return node;
-        }
-        return undefined;
-    }
-
-    // 在链表的任意位置插入元素
-    insert(element, index) {
-        if(indxe >=0 && index <= this.count) {
-            const node = new Node(element);
-            if(index === 0) {
-                const current = this.head;
-                node.next = current;
-                this.head = node;
-            } else {
-                const previous = this.getElementAt(index - 1);
-                const current = previous.next;
-                node.next = current;
-                previous.next = node;
-            }
-            this.count++;
-            return true;
-        }
-        return false;
-    }
-
-    // 返回一个元素在链表中的位置
-    indexOf(element) {
-        let current = this.head;
-        for(let i=0; i < this.cont && current != null; i++) {
-            if(this.equalsFn(element, current.element)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    // 从链表中移除元素
-    remove(element) {
-        const index = this.indexOf(element);
-        return this.removeAt(index);
-    }
-
-    // 返回链表长度
-    size() {
-        return this.count;
-    }
-
-    isEmpty() {
-        return this.size() === 0;
-    }
-
-    getHead() {
-        return this.head;
     }
 }
 
 
-// 实现双向链表
-class DoublyLinkedList extends LinkedList {
-    constructor(equalsFn = defaultEquals) {
-        super(equalsFn);
-        this.tail = undefined;
+// 抽象产品类
+class AbstractProduct {
+    constructor() {
+        if(new.target === AbstractProduct) {
+            throw new Error('抽象类不能直接实例化');
+        }
+        this.kid = 'product1';
+    }
+
+    operate() {
+        throw new Error('抽象方法无法调用');
     }
 }
 
 
+// 具体产品类
+class Product1 extends AbstractProduct {
+    constructor() {
+        super();
+        this.type = 'Product1';
+    }
 
+    operate() {
+        console.log(this.kid + '~~~' + this.type);
+    }
+}
+
+
+/**
+工厂模式和抽象工厂模式的区别
+1.工厂模式 主要关注单独的产品实例的创建
+2.抽象工厂模式 主要关注产品类簇实例的创建，如果产品类簇只有一个产品，那么此时的抽象工厂模式就退化为工厂模式了
+
+*/
 
 
 

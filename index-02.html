@@ -4,133 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>栈</title>
+    <title>单列模式</title>
 </head>
 <body>
 
 
 
-
 <script>
 /**
- *栈：是一种遵循后进先出(LIFO)原则的有序集合
- *新添加或待删除的元素都保存在栈的同一端，叫做栈顶；另一端叫栈底。
- * 
+ *单列模式(Singleton Pattern)
+ *保证一个类只有一个实例，并提供一个访问它的全局访问点。第二次使用同一个类创建新对象的时候，应该得到与第一次创建对象完全相同
+ *的对象。
+ *
+ *
  *
 */
 
-{
-    class Stack{
-        constructor() {
-            this.items = [];
-        }
+// 单列模式的实现
 
-        // 往栈顶添加元素
-        push(element) {
-            this.items.push(element);
-        }
-
-        // 移除栈顶的元素
-        pop() {
-            this.items.pop();
-        }
-
-        // 该方法返回栈顶的元素
-        peek() {
-            return this.items[this.items.length - 1];
-        }
-
-        // 返回栈元素个数，栈的长度
-        size() {
-            return this.items.length;
-        }
-
-        // 检查栈是否为空
-        isEmpty() {
-            return this.items.length === 0;
-        }
-
-        // 清空栈内元素
-        clear() {
-            this.items = [];
-        }
-
+function ManageGame() {
+    if(ManageGame._schedule) {
+        return ManageGame._schedule;
     }
+    ManageGame._schedule = this;
+}
 
-    const stack = new Stack();
-
-    stack.push(5);
-    stack.push(8);
-    
+ManageGame.getInstance = function() {
+    if(ManageGame._schedule) {
+        return ManageGame._schedule;
+    }
+    return ManageGame._schedule = new ManageGame();
 }
 
 
-{
-    class Stack{
-        constructor() {
-            this.count = 0;     // 记录栈的大小
-            this.items = {};
-        }
+// IIFE方式创建单列
+const Singleton = (function() {
+    let _instance = null;    // 存储单列
 
-        push(item) {
-            this.items[this.count] = item;
-            this.count++;
-        }
-
-        size() {
-            return this.count;
-        }
-
-        isEmpty(){
-            return this.count === 0;
-        }
-
-        pop() {
-            if(this.isEmpty()) return undefined;
-            this.count--;
-            const result = this.items[this.count];
-            delete this.items[this.count];
-            return result;
-        }
-
-        peek() {
-            if(this.isEmpty()) return undefined;
-            return this.items[this.count -1];
-        }
-
-        clear() {
-            this.items = {};
-            this.count = 0;
-        }
+    const Singleton = function() {
+        if(_instance) return _instance;
+        _instance = this;
+        this.init();
+        return _instance;
     }
 
-    // 利用栈结构，把十进制转换成基数为2~36的任意进制
-    // decNumber: 需要转换的十进制数据
-    // base：从十进制转换到 base 进制, 2 <= base <= 36 
-    function baseConverter(decNumber, base) {
-        const remStack = new Stack();
-        const digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        let number = decNumber;
-        let rem;
-        let baseString = '';
+    Singleton.prototype.inti = function() {
+        this.foo = 'Singleton Pattern'
+    }
 
-        if(!(base >=2 && base <= 36)) {
-            return '';
-        }
+    Singleton.getInstance = function() {
+        if(_instance) return _instance;
+        _instance = new Singleton();
+        return _instance;
+    }
 
-        while(number > 0) {
-            rem = Math.floor(number % base);
-            remStack.push(rem);
-            number = Math.floor(number / base);
-        }
+    return Singleton;
+})();
 
-        while(!remStack.isEmpty()) {
-            baseString += digits[remStack.pop()];
-        }
 
-        return baseString;
+let visitor1 = new Singleton();
+let visitor2 = new Singleton();
+console.log(visitor1 === visitor2); // true
+
+let visitor3 = Singleton.getInstance();
+console.log(visitor3 === visitor2); // true
+
+
+// ES6块级作用域方式创建单列
+
+let getInstance;
+{
+    let _instance = null;
+
+    const Singleton = function() {
+        if(_instance) return _instance;
+        _instance = this;
+        this.init();
+        return _instance;
+    }
+
+    Singleton.prototype.inti = function() {
+        this.foo = 'Singleton Pattern'
+    }
+
+    Singleton.getInstance = function() {
+        if(_instance) return _instance;
+        _instance = new Singleton();
+        return _instance;
+    }
+
+    return Singleton;
+}
+
+
+
+// 懒汉式单列是在使用时才实例化
+// 饿汉式单列是在程序启动的时候或者单列模式类一加载的时候，就 被创建
+
+class FuncClass {
+    constructor() {
+        this.bar = 'bar';
     }
 }
+
+// 饿汉式
+const HungrySingleton = function() {
+    const _instance = new FuncClass();
+    return function() {
+        return _instance;
+    }
+}
+
+
+// 懒汉式
+const LazySingleton = function() {
+    let _instance = null;
+    return function() {
+        return _instance || (_instance = new FuncClass());
+    }
+}
+
+
+/**
+单列模式的优点：
+1.单列模式在创建后内存中只有一个实例，节约了内存开支和实例化的性能开销，比起实例不断销毁和重建，更加节约资源。
+2.可以解决对资源的多重占用。
+3.只有一个实例，可以减少垃圾回收机制GC的压力，表现在浏览器中就是系统卡顿减少，操作更流畅，CPU资源占用更少。
+
+
+单列模式的缺点：
+1.对扩展不友好，一般不容易扩展，因为单列模式一般自行实例化，没有接口
+2.与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外部怎么样来实例化
+
+
+单列模式的使用场景：
+1.当一个类的实例化过程消耗的资源过多
+2.当项目中需要一个公共的状态，那么需要使用单列模式来保证访问的一致性
+
+*/
 
 
 
