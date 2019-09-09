@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>策略模式</title>
+</head>
+<body>
+
+<script>
+/**
+ *策略模式(Strategy Pattern):定义一系列的算法，将它们封装起来，并且使它们可以互相替换，然后根据输入来调整使用哪个算法。
+ *就像螺丝刀的头可以有不同的规格，但是螺丝刀柄只要有一把就可以了。
+ *
+ *
+*/
+
+// 针对不同的总价进行相应的折扣
+
+const discountMap = {
+  'minus100_30': function(price) {
+    return price - Math.floor(price / 100) * 30;
+  },
+  'minus200_80': function(price) {
+    return price - Math.floor(price / 200) * 30;
+  },
+  'percent80': function(price) {
+    return price * 80;
+  }
+}
+
+function PriceCalculate(discountType, price) {
+  return discountMap[discountType] && discountMap[discountType](price);
+}
+
+</script>
+</body>
+</html>
