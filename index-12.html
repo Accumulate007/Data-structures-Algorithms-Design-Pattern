@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>桥接模式</title>
+</head>
+<body>
+
+<script>
+/**
+ *组合模式(Bridge Pattern):将抽象部分和实现部分分离，使他们都可以独立地变化。
+ *例如宝马，奔驰，红旗这些都是具体的实现，车就是这些具体实现的共同抽象。
+ *
+ *
+*/
+
+class Washer {
+  constructor(motorType, rollerType, transducerType) {
+    this.motor = new Motor(motorType);
+    this.roller = new Roller(rollerType);
+    this.transducer = new Transducer(transducerType);
+  }
+
+  work() {
+    this.motor.run();
+    this.roller.run();
+    this.transducer.run();
+  }
+}
+
+
+class Motor {
+  constructor(type) {
+    this.motorType = type;
+  }
+
+  run() {
+    console.log(this.motorType + ' is working~~~');
+  }
+}
+
+class Roller {
+  constructor(type) {
+    this.rollerType = type;
+  }
+
+  run() {
+    console.log(this.rollerType + ' is working~~~');
+  }
+}
+
+class Transducer {
+  constructor(type) {
+    this.transducer = type;
+  }
+
+  run() {
+    console.log(this.transducer + ' is working~~~');
+  }
+}
+
+const washerA = new Washer('小功率', '直立', '大马力');
+</script>
+</body>
+</html>
