@@ -12,20 +12,51 @@
 
 <script>
 /**
- *模板方法模式(Template Method Pattern)
- *
+ *模板方法模式(Template Method Pattern)：父类中定义一组算法骨架，而将一些实现步骤延迟到子类中，使得子类可以在不改变父类算法结果的同时，重新定义算法中
+ *的某些实现。
  *
  *
 */
 
+// 定义抽象父类
+class AbstractClass {
+	constructor() {
+		if(new.target === AbstractClass) {
+			throw new Error('抽象类不能直接实例化');
+		}
+	}
 
+	// 公用方法
+	operate01() {
+		console.log('all children can use this function...');
+	}
 
+	// 抽象方法，具体由子类自己实现
+	operate02() {
+		throw new Error('抽象方法无法调用!');
+	}
 
+	templateMethod() {
+		this.operate01();
+		this.operate02();
+	}
+}
 
+// 实现子类，继承父类
+class ConcreteClass extends AbstractClass {
+	constructor() {
+		super();
+	}
 
+	// 覆盖父类中的抽象方法
+	operate02() {
+		console.log('ConcreteClass operate02 call...');
+	}
+}
 
-
-
+const instance = new ConcreteClass();
+instance.templateMethod();
+    
 </script>
 </body>
 </html>
