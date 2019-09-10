@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>职责链模式</title>
+</head>
+<body>
+
+
+
+<script>
+/**
+ *职责链模式( Pattern)：
+ *1.请求在一系列对象中传递，形成一条链
+ *2.链中的请求接收者对请求进行分析，要么处理这个请求，要么把这个请求传递给链的下一个接收者
+ *
+*/
+
+class Leader {
+	constructor() {
+		this.nextLeader = null;
+	}
+
+	setNext(next) {
+		this.nextLeader = next;
+		return next;
+	}
+}
+
+class GroupLeader extends Leader {
+	constructor() {
+		super();
+	}
+
+	handle(duration) {
+		if(duration <= 0.5) {
+			console.log('ok');
+		} else {
+			this.nextLeader.handle(duration);
+		}
+	}
+}
+
+class DepartmentLeader extends Leader {
+	constructor() {
+		super();
+	}
+	
+	handle(duration) {
+		if(duration <= 2) {
+			console.log('ok');
+		} else {
+			this.nextLeader.handle(duration);
+		}
+	}
+}
+
+const z1 = new GroupLeader();
+const z2 = new DepartmentLeader();
+
+z1.setNext(z2);
+
+</script>
+</body>
+</html>
