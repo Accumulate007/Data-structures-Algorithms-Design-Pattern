@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>迭代器模式</title>
+</head>
+<body>
+
+
+
+<script>
+/**
+ *迭代器模式(Iterator Pattern)：顺序地访问聚合对象内部的元素，又无需知道对象内部的结构。使用了迭代器之后，使用者不需要知道对象内部构造，就可以按顺序
+ *访问对象的内部元素。
+ *
+ *
+*/
+
+// ES6中的迭代器
+
+let bar = {
+	'a': 1,
+	[Symbol.iterator]: function() {
+		let valObj = [
+			{value: '111', done: false},
+			{value: '222', done: false},
+			{value: undefined, done: true}
+		];
+
+		return {
+			next: function() {
+				return valObj.shift();
+			}
+		}
+	}
+}
+
+for(let key of bar) {
+	console.log(key);
+}
+
+// 111
+// 222
+// undefined
+
+</script>
+</body>
+</html>
